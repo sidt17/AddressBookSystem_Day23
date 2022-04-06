@@ -20,11 +20,11 @@ namespace AddressBookProgram
                 {
 
                     case 1:
-                        AddressBook.AddressBookNewNameValidator();
+                        AddressBook.AddressBookNewName();
                         break;
 
                     case 2:
-                        AddressBook.AddressBookExistingNameValidator();
+                        AddressBook.AddressBookExistingName();
                         break;
 
                     case 3:
