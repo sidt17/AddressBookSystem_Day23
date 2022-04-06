@@ -11,14 +11,14 @@ namespace AddressBookProgram
 
 
 
-        public static void AddressBookNewNameValidator()
+        public static void AddressBookNewName()
         {
             Console.WriteLine("Enter the new addressbook name\n");
             string addressBookName = Console.ReadLine();
             if (AddressBookDictionary.ContainsKey(addressBookName))
             {
                 Console.WriteLine("Please enter a new addressbook name. The name entered already exist");
-                AddressBookNewNameValidator();
+                AddressBookNewName();
             }
             else
             {
@@ -26,14 +26,14 @@ namespace AddressBookProgram
                 EnterDetails(addressBookName);
             }
         }
-        public static void AddressBookExistingNameValidator()
+        public static void AddressBookExistingName()
         {
             Console.WriteLine("Enter the Existing addressbook name\n");
             string addressBookName = Console.ReadLine();
             if (!AddressBookDictionary.ContainsKey(addressBookName))
             {
                 Console.WriteLine("Please enter a new addressbook name. The name entered already exist");
-                AddressBookExistingNameValidator();
+                AddressBookExistingName();
             }
             else
             {
@@ -262,21 +262,55 @@ namespace AddressBookProgram
         }
         public static void PersonSearch()
         {
+            Dictionary<string, List<Contact>> cityPersons = new Dictionary<string, List<Contact>>();
+            Dictionary<string, List<Contact>> statePerson = new Dictionary<string, List<Contact>>();
+
             Console.WriteLine("Enter the city that you want to search");
             string cityKey = Console.ReadLine();
+            cityPersons[cityKey] = new List<Contact>();
             Console.WriteLine("Enter the state that you want to search");
             string stateKey = Console.ReadLine();
+            statePerson[stateKey] = new List<Contact>();
             foreach (string addressBookName in AddressBookDictionary.Keys)
             {
                 foreach (Contact contact in AddressBookDictionary[addressBookName])
                 {
-                    if (cityKey.ToLower() == contact.City || stateKey.ToLower() == contact.State)
+                    if (cityKey.ToLower() == contact.City.ToLower())
                     {
-                        Console.WriteLine("In address book {0}, {1} is staying in {2} city and {3} state",
-                            addressBookName, contact.FirstName, contact.City, contact.State);
+                        cityPersons[cityKey].Add(contact);
+                    }
+                    if (stateKey.ToLower() == contact.State.ToLower())
+                    {
+                        statePerson[stateKey].Add(contact);
                     }
                 }
             }
+            PersonSearchDisplay(cityPersons, statePerson, cityKey, stateKey);
+        }
+
+
+        public static void PersonSearchDisplay(Dictionary<string, List<Contact>> cityPersons, Dictionary<string, List<Contact>> statePersons, string cityKey, string stateKey)
+        {
+            Console.WriteLine("------------------- Persons in {0} city-------------------------", cityKey);
+            foreach (Contact contact in cityPersons[cityKey])
+            {
+                Console.WriteLine("{0}", contact.FirstName);
+            }
+            Console.WriteLine("--------------------Persons in {0} state", stateKey);
+            foreach (Contact contact in statePersons[stateKey])
+            {
+                Console.WriteLine("{0}", contact.FirstName);
+            }
+            Console.WriteLine("Total count of persons in the city {0} is {1}", cityKey, cityPersons[cityKey].Count);
+            Console.WriteLine("--------------------Persons in {0} state", stateKey);
+            foreach (Contact contact in statePersons[stateKey])
+            {
+                Console.WriteLine("{0}", contact.FirstName);
+            }
+
+
+            Console.WriteLine("Total count of persons in the state {0} is {1}", stateKey, statePersons[stateKey].Count);
         }
     }
+    
 }
